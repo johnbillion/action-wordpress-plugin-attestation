@@ -1,0 +1,73 @@
+name: Attest build provenance of a plugin on WordPress.org
+
+inputs:
+  plugin:
+    description: The plugin slug
+    required: true
+    type: string
+  version:
+    description: The version number of the release
+    required: true
+    type: string
+  zip-path:
+    description: The path to the plugin zip file
+    required: true
+    type: string
+  dry-run:
+    description: Set this to true to skip generating the actual attestation
+    required: false
+    type: boolean
+    default: false
+
+runs:
+  using: composite
+  steps:
+    # This fetches the zipped plugin from w.org. The zip might not exist yet if the plugin uses release confirmation
+    # and the release hasn't been confirmed. This will retry until the zip is available.
+    - name: Fetch ZIP from WordPress.org
+      run: | #shell
+        zipurl="https://downloads.wordpress.org/plugin/${{ inputs.plugin }}.${{ inputs.version }}.zip"
+        echo "Fetching plugin zip from $zipurl..."
+        while true; do
+          # Perform a HEAD request to check if the zip is available
+          status_code=$(curl -s -o /dev/null -w "%{http_code}" -I "$zipurl")
+          if [ "$status_code" -eq 200 ]; then
+            curl -s -o "${{ inputs.plugin }}.zip" "$zipurl"
+            break
+          else
+            echo "Plugin zip not available yet (HTTP status $status_code), retrying in 20 seconds..."
+            sleep 20
+          fi
+        done
+      shell: bash
+
+    # Now compare the contents of the generated zip and the w.org zip to ensure they match. Only then can we attest the w.org zip.
+    - name: Unzip ${{ inputs.plugin }}.zip from WordPress.org
+      run: | #shell
+        unzip "${{ inputs.plugin }}.zip" -d zip-org
+      shell: bash
+
+    - name: Unzip the generated zip
+      run: | #shell
+        unzip "${{ inputs.zip-path }}" -d zip-generated
+      shell: bash
+
+    - name: Ensure the directories are identical
+      run: | #shell
+        diff -r zip-generated zip-org
+      shell: bash
+
+    - name: Generate attestation for the plugin
+      if: ${{ ! inputs.dry-run }}
+      uses: actions/attest-build-provenance@v1
+      with:
+        subject-path: "${{ github.workspace }}/${{ inputs.plugin }}.zip"
+        subject-name: "wordpress.org-${{ inputs.plugin }}-${{ inputs.version }}"
+
+    - name: Check the attestation
+      if: ${{ ! inputs.dry-run }}
+      run: | #shell
+        gh attestation verify "${{ inputs.plugin }}.zip" --repo "${{ github.repository }}"
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
