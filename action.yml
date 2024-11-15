@@ -1,4 +1,9 @@
-name: Attest build provenance of a plugin on WordPress.org
+name: WordPress Plugin Attestation
+description: Attest build provenance of a plugin on WordPress.org
+author: johnbillion
+branding:
+  icon: check-circle
+  color: green
 
 inputs:
   plugin:
