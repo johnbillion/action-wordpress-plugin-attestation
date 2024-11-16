@@ -30,7 +30,7 @@ Within the GitHub Actions workflow which deploys your plugin to WordPress.org:
 2. Add the following step to your workflow so it runs after your plugin has been deployed:
 
    ```yaml
-   - uses: johnbillion/attest-wordpress-plugin-build-provenance/@0.1.1
+   - uses: johnbillion/attest-wordpress-plugin-build-provenance/@0.2.0
      with:
        plugin: my-plugin-slug
        version: 1.2.3
@@ -63,7 +63,7 @@ jobs:
         with:
           generate-zip: true
       - name: Attest build provenance
-        uses: johnbillion/attest-wordpress-plugin-build-provenance/@0.1.1
+        uses: johnbillion/attest-wordpress-plugin-build-provenance/@0.2.0
         with:
           plugin: my-plugin-slug
           version: ${{ inputs.version }}
