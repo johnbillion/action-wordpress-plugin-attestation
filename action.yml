@@ -49,12 +49,12 @@ runs:
     # Now compare the contents of the generated zip and the w.org zip to ensure they match. Only then can we attest the w.org zip.
     - name: Unzip ${{ inputs.plugin }}.zip from WordPress.org
       run: | #shell
-        unzip "${{ inputs.plugin }}.zip" -d zip-org
+        unzip "${{ inputs.plugin }}.zip" -q -d zip-org
       shell: bash
 
     - name: Unzip the generated zip
       run: | #shell
-        unzip "${{ inputs.zip-path }}" -d zip-generated
+        unzip "${{ inputs.zip-path }}" -q -d zip-generated
       shell: bash
 
     - name: Ensure the directories are identical
