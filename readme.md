@@ -7,6 +7,14 @@ Do you use GitHub Actions to build and deploy your plugin to the WordPress.org P
 
 This action works well with [the WordPress.org Plugin Deploy action by 10up](https://github.com/10up/action-wordpress-plugin-deploy), but it will work with any workflow which generates a ZIP file of your plugin.
 
+## What is this and why should I use it?
+
+From [the GitHub documentation on artifact attestation](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-to-establish-provenance-for-builds):
+
+> Artifact attestations enable you to increase the supply chain security of your builds by establishing where and how your software was built.
+
+This action generates an attestation for the ZIP file that is served by WordPress.org for each release of your plugin. This can subsequently be used by consumers to verify that a given version of your plugin actually originated from your GitHub repo and its deployment workflow.
+
 ## Usage
 
 Within the GitHub Actions workflow which deploys your plugin to WordPress.org:
@@ -63,7 +71,7 @@ jobs:
 
 You need to know the name of the GitHub repo that the plugin was built from, for example `johnbillion/query-monitor`.
 
-Then you can fetch the plugin zip at a specific version and attest it using `gh`:
+Then you can fetch the plugin ZIP at a specific version and attest it using `gh`:
 
 ```sh
 wget https://downloads.wordpress.org/plugin/query-monitor.3.16.4.zip
