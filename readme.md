@@ -74,11 +74,11 @@ gh attestation verify query-monitor.3.16.4.zip --repo johnbillion/query-monitor
 
 The action will output a link to the attestation within your repo.
 
-You cal also view all the attestations by appending `/attestations` to your repo URL (there's no UI in GitHub yet to navigate to this screen), for example https://github.com/johnbillion/query-monitor/attestations .
+You can also view all the attestations from the Attestations link on the Actions screen of your repo.
 
 ## Can I call this action within a reusable workflow?
 
-Yes, but be aware that when you verify an attestation you need to use the name of the repo that ran the workflow file. If your reusable workflow lives in a different repo then you'll need to use the name of that repo when verifying the attestation. If the reusable workflow is in the same repo then it's fine.
+Yes, but be aware that when you verify an attestation you need to use the name of the repo containing the workflow file that performed the attestation. If your reusable workflow lives in a different repo then you'll need to use the name of that repo. If the reusable workflow is in the same repo as your plugin then it's fine.
 
 ## License
 
