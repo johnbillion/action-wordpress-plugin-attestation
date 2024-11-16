@@ -70,6 +70,16 @@ wget https://downloads.wordpress.org/plugin/query-monitor.3.16.4.zip
 gh attestation verify query-monitor.3.16.4.zip --repo johnbillion/query-monitor
 ```
 
+## Where can I see the attestations for my plugin?
+
+The action will output a link to the attestation within your repo.
+
+You cal also view all the attestations by appending `/attestations` to your repo URL (there's no UI in GitHub yet to navigate to this screen), for example https://github.com/johnbillion/query-monitor/attestations .
+
+## Can I call this action within a reusable workflow?
+
+Yes, but be aware that when you verify an attestation you need to use the name of the repo that ran the workflow file. If your reusable workflow lives in a different repo then you'll need to use the name of that repo when verifying the attestation. If the reusable workflow is in the same repo then it's fine.
+
 ## License
 
 MIT
