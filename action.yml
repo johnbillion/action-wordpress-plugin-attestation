@@ -35,7 +35,31 @@ runs:
     # This fetches the zipped plugin from w.org. The zip might not exist yet if the plugin uses release confirmation
     # and the release hasn't been confirmed. This will retry until the zip is available or the timeout is reached.
     - name: Fetch ZIP from WordPress.org
-      run: ./bin/fetch-zip.sh ${{ inputs.plugin }} ${{ inputs.version }} ${{ inputs.timeout }}
+      run: | #shell
+        zipurl="https://downloads.wordpress.org/plugin/${{ inputs.plugin }}.${{ inputs.version }}.zip"
+        echo "Fetching plugin ZIP from $zipurl ..."
+        elapsed=0
+        sleep=20
+        per_minute=$((60 / $sleep))
+        max_retries=$(( ${{ inputs.timeout }} * $per_minute ))
+
+        while [ $elapsed -lt $max_retries ]; do
+          # Perform a HEAD request to check if the ZIP is available
+          status_code=$(curl -s -o /dev/null -w "%{http_code}" -I "$zipurl")
+          if [ "$status_code" -eq 200 ]; then
+            curl -s -o "${{ inputs.plugin }}.zip" "$zipurl"
+            break
+          else
+            echo "Plugin ZIP not available yet (HTTP status $status_code), retrying in $sleep seconds..."
+            sleep $sleep
+            elapsed=$((elapsed + 1))
+          fi
+        done
+
+        if [ $elapsed -ge $max_retries ]; then
+          echo "Error: ${{ inputs.timeout }} minute timeout reached. Plugin ZIP not available."
+          exit 1
+        fi
       shell: bash
 
     # Now compare the contents of the generated zip and the w.org zip to ensure they match. Only then can we attest the w.org zip.
