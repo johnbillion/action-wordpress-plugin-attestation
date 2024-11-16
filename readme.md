@@ -6,6 +6,9 @@ This action works particularly well with [the WordPress.org Plugin Deploy action
 
 ## Usage
 
+> [!WARNING]
+> This action is under development. Version 1.0 will be published when it's considered stable.
+
 Within the GitHub Actions workflow which deploys your plugin to WordPress.org:
 
 1. Ensure that at least the following permissions are set:
@@ -29,6 +32,12 @@ Within the GitHub Actions workflow which deploys your plugin to WordPress.org:
        version: 1.2.3
        zip-path: my-plugin-slug.zip
    ```
+
+## How do I verify a plugin that publishes attestations?
+
+```
+gh attestation verify query-monitor.3.16.4.zip --repo johnbillion/query-monitor
+```
 
 ## License
 
