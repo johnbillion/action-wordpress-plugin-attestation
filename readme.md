@@ -70,6 +70,20 @@ jobs:
           zip-path: ${{ steps.deploy.outputs.zip-path }}
 ```
 
+## Why wouldn't I just generate the attestation directly with `actions/attest-build-provenance`?
+
+This action is specifically for generating an artifact attestation for the ZIP file on the plugin directory on WordPress.org. This facilitates consumers being able to verify attestation for the ZIP file that they download from WordPress.org.
+
+## Does this work if release confirmation is enabled?
+
+The plugin directory on WordPress.org provides a feature called [Release Confirmation](https://developer.wordpress.org/plugins/wordpress-org/release-confirmation-emails/).
+
+This action supports release confirmation because it is designed to retry fetching the plugin ZIP from WordPress.org for up to 60 minutes by default, which allows you time to confirm the release.
+
+## Tip
+
+Set the `timeout-minutes` directive to a little higher than the timeout value of the action, which is 60 minutes by default. This allows some leeway for generating the attestation if you confirm your release right before the timeout is reached. 70 is a reasonable default.
+
 ## How do I verify a plugin that publishes attestations?
 
 You need to know the name of the GitHub repo that the plugin was built from, for example `johnbillion/query-monitor`.
