@@ -37,6 +37,9 @@ Within the GitHub Actions workflow which deploys your plugin to WordPress.org:
        zip-path: my-plugin-slug.zip
    ```
 
+> [!WARNING]
+> In order to support plugin release confirmation, which is a manual step, this action will attempt to fetch the zip file from WordPress.org for up to 60 minutes. You can adjust this via the `timeout` input parameter.
+
 ## Example workflow
 
 ```yaml
