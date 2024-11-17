@@ -8,8 +8,9 @@ branding:
 inputs:
   plugin:
     description: The plugin slug
-    required: true
+    required: false
     type: string
+    default: ${{ github.event.repository.name }}
   version:
     description: The version number of the release
     required: true
