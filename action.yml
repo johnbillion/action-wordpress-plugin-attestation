@@ -80,14 +80,14 @@ runs:
       shell: bash
 
     - name: Generate attestation for the plugin
-      if: ${{ inputs.dry-run == false }}
+      if: ${{ inputs.dry-run != true }}
       uses: actions/attest-build-provenance@v1
       with:
         subject-path: "${{ github.workspace }}/${{ inputs.plugin }}.zip"
         subject-name: "wordpress.org-${{ inputs.plugin }}-${{ inputs.version }}"
 
     - name: Check the attestation
-      if: ${{ inputs.dry-run == false }}
+      if: ${{ inputs.dry-run != true }}
       run: | #shell
         gh attestation verify "${{ inputs.plugin }}.zip" --repo "${{ github.repository }}"
       shell: bash
