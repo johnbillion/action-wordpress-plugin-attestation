@@ -118,6 +118,9 @@ Yes, but be aware that when a consumer verifies an attestation they need to use 
 * Make the `version` input parameter optional
 * Add support for arbitrary remote hosts in addition to wordpress.org
 * Consider how attestations can be used as part of workflows for installing and deploying plugins
+  - WP-CLI
+  - Composer, Packagist, WPackagist
+* Sigstore, in-toto, SLSA, SBOM, OpenSSF Scorecard...
 
 ## License
 
