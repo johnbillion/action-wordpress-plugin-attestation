@@ -38,7 +38,7 @@ Within the GitHub Actions workflow which deploys your plugin to WordPress.org:
    ```
 
 > [!WARNING]
-> In order to support plugin release confirmation, which is a manual step, this action will attempt to fetch the zip file from WordPress.org for up to 60 minutes. You can adjust this via the `timeout` input parameter.
+> In order to support [plugin release confirmation](https://developer.wordpress.org/plugins/wordpress-org/release-confirmation-emails/) this action will attempt to fetch the zip file from WordPress.org for up to 60 minutes. You can adjust this via the `timeout` input parameter.
 
 ## Example workflow
 
@@ -76,9 +76,7 @@ This action is specifically for generating an artifact attestation for the ZIP f
 
 ## Does this work if release confirmation is enabled?
 
-The plugin directory on WordPress.org provides a feature called [Release Confirmation](https://developer.wordpress.org/plugins/wordpress-org/release-confirmation-emails/).
-
-This action supports release confirmation because it is designed to retry fetching the plugin ZIP from WordPress.org for up to 60 minutes by default, which allows you time to confirm the release.
+Yes, this action supports [plugin release confirmation](https://developer.wordpress.org/plugins/wordpress-org/release-confirmation-emails/) because it will repeatedly attempt to fetch the plugin ZIP from WordPress.org for up to 60 minutes by default, which allows you time to confirm the release.
 
 ## Tip
 
@@ -95,15 +93,31 @@ wget https://downloads.wordpress.org/plugin/query-monitor.3.16.4.zip
 gh attestation verify query-monitor.3.16.4.zip --repo johnbillion/query-monitor
 ```
 
+## How can I test this action without doing a release?
+
+Add the steps to a `workflow_dispatch` workflow that checks out a tag, zips it up, and then runs it. You can use the 10up WordPress.org Plugin Deploy action with the `dry-run` input parameter to get the ZIP file path.
+
+Optionally use the `dry-run` input parameter for this action to perform all the steps without actually creating and publishing the attestation.
+
+## How do I re-run attestation if the action times out before I confirm the release on WordPress.org?
+
+See above.
+
 ## Where can I see the attestations for my plugin?
 
-The action will output a link to the attestation within your repo.
+The action will output a link to the attestation.
 
-You can also view all the attestations from the Attestations link on the Actions screen of your repo.
+You can also view all attestations from the Actions -> Attestations screen in your repo.
 
 ## Can I call this action within a reusable workflow?
 
 Yes, but be aware that when a consumer verifies an attestation they need to use the name of the repo containing the workflow file that performed the attestation. If the reusable workflow is in the same repo as your plugin then there's no problem, but if your reusable workflow lives in a different repo then they'll need to use the name of that repo.
+
+## TODO
+
+* Make the `version` input parameter optional
+* Add support for arbitrary remote hosts in addition to wordpress.org
+* Consider how attestations can be used as part of workflows for installing and deploying plugins
 
 ## License
 
