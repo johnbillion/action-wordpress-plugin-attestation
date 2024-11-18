@@ -103,7 +103,7 @@ You can also view all the attestations from the Attestations link on the Actions
 
 ## Can I call this action within a reusable workflow?
 
-Yes, but be aware that when you verify an attestation you need to use the name of the repo containing the workflow file that performed the attestation. If your reusable workflow lives in a different repo then you'll need to use the name of that repo. If the reusable workflow is in the same repo as your plugin then it's fine.
+Yes, but be aware that when a consumer verifies an attestation they need to use the name of the repo containing the workflow file that performed the attestation. If the reusable workflow is in the same repo as your plugin then there's no problem, but if your reusable workflow lives in a different repo then they'll need to use the name of that repo.
 
 ## License
 
