@@ -35,7 +35,7 @@ runs:
   steps:
     - name: Debug
       run: | #shell
-        echo "${{ toJSON(inputs) }}"
+        echo '${{ toJSON(inputs) }}'
       shell: bash
 
     # This fetches the zipped plugin from w.org. The zip might not exist yet if the plugin uses release confirmation
