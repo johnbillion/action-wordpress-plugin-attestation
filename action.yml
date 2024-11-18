@@ -33,6 +33,16 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Debug
+      run: | #shell
+        echo "Inputs: ${{ toJSON(inputs) }}"
+        echo "Plugin: ${{ inputs.plugin }}"
+        echo "Version: ${{ inputs.version }}"
+        echo "ZIP path: ${{ inputs.zip-path }}"
+        echo "Timeout: ${{ inputs.timeout }}"
+        echo "Dry run: ${{ toJSON( inputs.dry-run ) }}"
+      shell: bash
+
     # This fetches the zipped plugin from w.org. The zip might not exist yet if the plugin uses release confirmation
     # and the release hasn't been confirmed. This will retry until the zip is available or the timeout is reached.
     - name: Fetch ZIP from WordPress.org
