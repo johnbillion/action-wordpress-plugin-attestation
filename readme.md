@@ -1,11 +1,11 @@
-# WordPress.org Plugin Attestation
+# WordPress Plugin Attestation
 
 Do you use GitHub Actions to build and deploy your plugin to the WordPress.org Plugin Directory? Add this action to your deployment workflow to generate an attestation for the build provenance of the plugin ZIP file on WordPress.org.
 
 > [!WARNING]
 > This action is under development. Version 1.0 will be published when it's considered stable.
 
-This action works well with [the WordPress.org Plugin Deploy action by 10up](https://github.com/marketplace/actions/wordpress-plugin-deploy), but it will work with any workflow which generates a ZIP file of your plugin.
+This action works well with [the WordPress Plugin Deploy action by 10up](https://github.com/marketplace/actions/wordpress-plugin-deploy), but it will work with any workflow which generates a ZIP file of your plugin.
 
 ## What is this and why should I use it?
 
