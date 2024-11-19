@@ -137,7 +137,7 @@ Yes, but be aware that when a consumer verifies an attestation they need to use 
 * Consider how attestations can be used as part of workflows for installing and deploying plugins
   - WP-CLI
   - Composer, Packagist, WPackagist
-* Sigstore, in-toto, SLSA, SBOM, OpenSSF Scorecard...
+* Sigstore, Cosign, Rekor, SLSA, SBOM, OpenSSF Scorecard...
 
 ## License
 
