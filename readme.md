@@ -32,7 +32,7 @@ Within the GitHub Actions workflow which deploys your plugin to WordPress.org:
 2. Add the following step to your workflow so it runs after your plugin has been deployed:
 
    ```yaml
-   - uses: johnbillion/action-wordpress-plugin-attestation@0.4.0
+   - uses: johnbillion/action-wordpress-plugin-attestation@0.5.0
      with:
        zip-path: my-plugin-slug.zip
    ```
@@ -59,7 +59,7 @@ jobs:
         with:
           generate-zip: true
       - name: Attest build provenance
-        uses: johnbillion/action-wordpress-plugin-attestation@0.4.0
+        uses: johnbillion/action-wordpress-plugin-attestation@0.5.0
         with:
           zip-path: ${{ steps.deploy.outputs.zip-path }}
 ```
@@ -69,7 +69,7 @@ jobs:
 Here is the full list of required and optional inputs:
 
 ```yaml
-- uses: johnbillion/action-wordpress-plugin-attestation@0.4.0
+- uses: johnbillion/action-wordpress-plugin-attestation@0.5.0
   with:
     # Required. Path to the ZIP file generated for the plugin release.
     # Use `${{ steps.deploy.outputs.zip-path }}` if you're using the WordPress Plugin Deploy action by 10up.
