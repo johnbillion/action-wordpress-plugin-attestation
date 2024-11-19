@@ -34,12 +34,8 @@ Within the GitHub Actions workflow which deploys your plugin to WordPress.org:
    ```yaml
    - uses: johnbillion/action-wordpress-plugin-attestation@0.4.0
      with:
-       plugin: my-plugin-slug
        zip-path: my-plugin-slug.zip
    ```
-
-> [!WARNING]
-> In order to support [plugin release confirmation](https://developer.wordpress.org/plugins/wordpress-org/release-confirmation-emails/) this action will attempt to fetch the zip file from WordPress.org for up to 60 minutes. You can adjust this via the `timeout` input parameter.
 
 ## Example workflow
 
@@ -65,8 +61,31 @@ jobs:
       - name: Attest build provenance
         uses: johnbillion/action-wordpress-plugin-attestation@0.4.0
         with:
-          plugin: my-plugin-slug
           zip-path: ${{ steps.deploy.outputs.zip-path }}
+```
+
+## Inputs
+
+Here is the full list of required and optional inputs:
+
+```yaml
+- uses: johnbillion/action-wordpress-plugin-attestation@0.4.0
+  with:
+    # Required. Path to the ZIP file generated for the plugin release.
+    # Use something like `${{ steps.deploy.outputs.zip-path }}` if you're using the WordPress Plugin Deploy action by 10up.
+    zip-path: my-plugin-slug.zip
+
+    # Optional. Plugin slug name. Defaults to the repo name.
+    plugin: my-plugin-slug
+
+    # Optional. Plugin version number. Defaults to the tag name if the workflow was triggered for a tag or a release.
+    version: 1.2.3
+
+    # Optional. Maximum time in minutes to spend trying to fetch the ZIP from WordPress.org.
+    timeout: 60
+
+    # Optional. Whether to perform a dry-run which runs everything except the actual attestation step.
+    dry-run: false
 ```
 
 ## Why wouldn't I just generate the attestation directly with `actions/attest-build-provenance`?
