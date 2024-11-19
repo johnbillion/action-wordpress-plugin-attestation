@@ -13,8 +13,9 @@ inputs:
     default: ${{ github.event.repository.name }}
   version:
     description: The version number of the release
-    required: true
+    required: false
     type: string
+    default: ${{ github.ref_name }}
   zip-path:
     description: The path to the plugin zip file
     required: true

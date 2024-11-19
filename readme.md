@@ -35,7 +35,6 @@ Within the GitHub Actions workflow which deploys your plugin to WordPress.org:
    - uses: johnbillion/action-wordpress-plugin-attestation@0.4.0
      with:
        plugin: my-plugin-slug
-       version: 1.2.3
        zip-path: my-plugin-slug.zip
    ```
 
@@ -61,14 +60,12 @@ jobs:
         env:
           SVN_USERNAME: ${{ secrets.WPORG_SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.WPORG_SVN_PASSWORD }}
-          VERSION: ${{ inputs.version }}
         with:
           generate-zip: true
       - name: Attest build provenance
         uses: johnbillion/action-wordpress-plugin-attestation@0.4.0
         with:
           plugin: my-plugin-slug
-          version: ${{ inputs.version }}
           zip-path: ${{ steps.deploy.outputs.zip-path }}
 ```
 
@@ -117,7 +114,6 @@ Yes, but be aware that when a consumer verifies an attestation they need to use 
 
 ## TODO
 
-* Make the `version` input parameter optional
 * Add support for arbitrary remote hosts in addition to wordpress.org
 * Consider how attestations can be used as part of workflows for installing and deploying plugins
   - WP-CLI
