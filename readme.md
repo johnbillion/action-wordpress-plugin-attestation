@@ -15,7 +15,7 @@ From [the GitHub documentation on artifact attestation](https://docs.github.com/
 
 This action generates an attestation for the ZIP file that is served by WordPress.org for each release of your plugin. This can subsequently be used by consumers to verify that a given version of your plugin actually originated from your GitHub repo and its deployment workflow.
 
-There is not much tooling for the verification aspect at the moment, but in the future this can facilitate verifying that a plugin release came from its trusted author rather than an unwanted entitity, for example somebody who stole your wordpress.org svn password, hacked into wordpress.org, or performed a hostile plugin takeover.
+There is not much tooling for the verification aspect at the moment, but in the future this can facilitate verifying that a plugin release came from its trusted author rather than an unwanted entity, for example somebody who stole your wordpress.org svn password, hacked into wordpress.org, or performed a hostile plugin takeover.
 
 ## Usage
 
