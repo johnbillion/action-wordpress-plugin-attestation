@@ -162,7 +162,9 @@ See above.
 
 ## What SLSA level does this facilitate?
 
-To the best of my understanding, the build provenance attestation features on GitHub Actions mean that [your build and deployment will by default adhere to SLSA at Level 1](https://slsa.dev/get-started). In order to adhere to Level 3, further integration is needed with the SLSA provenance generation workflow. I am working on this in preparation for version 1.0 of this action.
+To the best of my understanding, build provenance attestation on GitHub [adheres to SLSA v1.0 Build Level 2](https://slsa.dev/spec/v1.0/levels).
+
+Adhering to Build Level 3 requires that you perform the attestation in isolation from the build. [One way to do this is to use a reusable workflow to perform the attestation](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-and-reusable-workflows-to-achieve-slsa-v1-build-level-3).
 
 ## Where can I see the attestations for my plugin?
 
