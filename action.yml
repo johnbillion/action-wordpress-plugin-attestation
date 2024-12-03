@@ -120,4 +120,5 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         path: ${{ inputs.plugin }}.zip
+        name: fetched-${{ inputs.plugin }}-${{ inputs.version }}
         if-no-files-found: error
