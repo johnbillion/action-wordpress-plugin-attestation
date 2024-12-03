@@ -95,7 +95,7 @@ runs:
     - name: Check the attestation
       if: ${{ inputs.dry-run == 'false' }}
       run: | #shell
-        gh attestation verify "${{ inputs.plugin }}.zip" --repo "${{ github.repository }}"
+        gh attestation verify "${{ inputs.plugin }}.zip" --owner "${{ github.repository_owner }}"
       shell: bash
       env:
         GH_TOKEN: ${{ github.token }}

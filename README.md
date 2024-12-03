@@ -100,13 +100,22 @@ Set the `timeout-minutes` directive to a little higher than the timeout value of
 
 ## How do I verify a plugin that publishes attestations?
 
-You need to know the name of the GitHub repo that the plugin was built from, for example `johnbillion/query-monitor`.
+You need to know either the name of the repo that the plugin was built from, for example `johnbillion/query-monitor`, or the name of the owner, for example `johnbillion`.
 
 Then you can fetch the plugin ZIP at a specific version and attest it using `gh`:
+
+### Attest with the full repo name
 
 ```sh
 wget https://downloads.wordpress.org/plugin/query-monitor.3.16.4.zip
 gh attestation verify query-monitor.3.16.4.zip --repo johnbillion/query-monitor
+```
+
+### Attest with just the owner name
+
+```sh
+wget https://downloads.wordpress.org/plugin/query-monitor.3.16.4.zip
+gh attestation verify query-monitor.3.16.4.zip --owner johnbillion
 ```
 
 ## How can I test this action without doing a release?
@@ -163,9 +172,14 @@ You can also view all attestations from the Actions -> Attestations screen in yo
 
 ## Can I call this action within a reusable workflow?
 
-Yes, but be aware that when a consumer uses `gh attestation verify` or any other tool to verify an attestation _they need to use the name of the repo that contains the workflow file that performed the attestation_. If the reusable workflow is in the same repo as your plugin then there's no problem, but if your reusable workflow lives in a different repo then they'll need to know and use the name of that repo during verification.
+Yes, but be aware that when a consumer uses `gh attestation verify` or any other tool to verify an attestation they need to either:
 
-For this reason I recommend against performing attestation in a workflow file that doesn't live in the same repo as your plugin.
+* Use the name of the repo that contains the workflow file that performed the attestation (via the `--repo` flag)
+* Use the name of the owner of the workflow file that performed the attestation (via the `--owner` flag)
+
+If the reusable workflow is in the same repo as your plugin or is owned by the same owner then there's no problem, but if your reusable workflow lives in a different repo then they'll need to either know and use the name of that repo during verification with the `--repo` flag, or know to use the `--owner` flag.
+
+Generating the attestation using a reusable workflow that's owned by another user is not supported. The attestion will technically succeed but the workflow will fail when it cannot verify the attestation.
 
 ## License
 
