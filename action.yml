@@ -30,6 +30,10 @@ inputs:
     required: false
     type: boolean
     default: false
+outputs:
+  base64-subjects:
+    description: The base64-encoded subjects for the attestation
+    value: ${{ steps.base64-subjects.outputs.handle }}
 
 runs:
   using: composite
@@ -110,12 +114,6 @@ runs:
       id: base64-subjects
       with:
         path: base64-subjects.txt
-
-    - name: Generate SLSA provenance attestation
-      if: ${{ inputs.dry-run == 'false' }}
-      uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.0.0
-      with:
-        base64-subjects-as-file: "${{ steps.base64-subjects.outputs.handle }}"
 
     - name: Upload the WordPress.org zip file as an artifact
       if: always()
