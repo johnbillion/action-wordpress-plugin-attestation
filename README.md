@@ -67,7 +67,7 @@ jobs:
 Here is the full list of required and optional inputs:
 
 ```yaml
-- uses: johnbillion/action-wordpress-plugin-attestation@v1
+- uses: johnbillion/action-wordpress-plugin-attestation@0.5.0
   with:
     # Required. Path to the ZIP file generated for the plugin release.
     # Use `${{ steps.deploy.outputs.zip-path }}` if you're using the WordPress.org Plugin Deploy action.
@@ -140,7 +140,7 @@ Optionally use the `dry-run` parameter to perform all the verification steps wit
             generate-zip: true
             dry-run: true
         - name: Attest build provenance
-          uses: johnbillion/action-wordpress-plugin-attestation@v0.5.0
+          uses: johnbillion/action-wordpress-plugin-attestation@0.5.0
           with:
             zip-path: ${{ steps.deploy.outputs.zip-path }}
             dry-run: true # Remove this to publish the attestation
