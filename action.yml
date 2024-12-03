@@ -1,4 +1,4 @@
-name: WordPress.org Plugin Attestation
+name: WordPress Plugin Attestation
 description: Generates an attestation for the build provenance of a plugin published on WordPress.org
 author: johnbillion
 branding:
