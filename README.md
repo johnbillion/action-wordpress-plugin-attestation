@@ -70,19 +70,23 @@ Here is the full list of required and optional inputs:
 - uses: johnbillion/action-wordpress-plugin-attestation@0.5.1
   with:
     # Required. Path to the ZIP file generated for the plugin release.
-    # Use `${{ steps.deploy.outputs.zip-path }}` if you're using the WordPress.org Plugin Deploy action.
+    # Use `${{ steps.deploy.outputs.zip-path }}` if you're using the
+    # WordPress.org Plugin Deploy action.
     zip-path: my-plugin-slug.zip
 
     # Optional. Plugin slug name. Defaults to the repo name.
     plugin: my-plugin-slug
 
-    # Optional. Plugin version number. Defaults to the tag name if triggered by pushing a tag or a release.
+    # Optional. Plugin version number. Defaults to the tag name if
+    # triggered by pushing a tag or creating a release.
     version: 1.2.3
 
-    # Optional. Maximum time in minutes to spend trying to fetch the ZIP from WordPress.org.
+    # Optional. Maximum time in minutes to spend trying to fetch the
+    # ZIP from WordPress.org.
     timeout: 60
 
-    # Optional. Whether to perform a dry-run which runs everything except the actual attestation step.
+    # Optional. Whether to perform a dry run which runs everything
+    # except the actual attestation step.
     dry-run: false
 ```
 
