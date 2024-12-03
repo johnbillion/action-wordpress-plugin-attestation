@@ -151,6 +151,10 @@ Optionally use the `dry-run` parameter to perform all the verification steps wit
 
 See above.
 
+## What SLSA level does this facilitate?
+
+To the best of my understanding, the build provenance attestation features on GitHub Actions mean that [your build and deployment will by default adhere to SLSA at Level 1](https://slsa.dev/get-started). In order to adhere to Level 3, further integration is needed with the SLSA provenance generation workflow. I am working on this in preparation for version 1.0 of this action.
+
 ## Where can I see the attestations for my plugin?
 
 The action will output a link to the attestation.
