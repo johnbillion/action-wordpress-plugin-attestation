@@ -100,7 +100,7 @@ Yes, this action specifically supports [plugin release confirmation](https://dev
 
 ## Tip
 
-Set the `timeout-minutes` directive to a little higher than the timeout value of the action, which is 60 minutes by default. This allows some leeway for generating the attestation if you confirm your release right before the timeout is reached. 70 is a reasonable default.
+Set the `timeout-minutes` directive to a little higher than the `timeout` input of the action, which is 60 minutes by default. This allows some leeway for generating the attestation if you confirm your release right before the timeout is reached. 70 is a reasonable value.
 
 ## How do I verify a plugin that publishes attestations?
 
@@ -181,11 +181,11 @@ You can also view all attestations from the Actions -> Attestations screen in yo
 Yes, but be aware that when a consumer uses `gh attestation verify` or any other tool to verify an attestation they need to either:
 
 * Use the name of the repo that contains the workflow file that performed the attestation (via the `--repo` flag)
-* Use the name of the owner of the workflow file that performed the attestation (via the `--owner` flag)
+* Or, use the name of the owner of the workflow file that performed the attestation (via the `--owner` flag)
 
-If the reusable workflow is in the same repo as your plugin or is owned by the same owner then there's no problem, but if your reusable workflow lives in a different repo then they'll need to either know and use the name of that repo during verification with the `--repo` flag, or know to use the `--owner` flag.
+If the reusable workflow is in the same repo as your plugin or is owned by the same owner then there's no problem, but if your reusable workflow lives in a different repo then the consumer will need to either know and use the name of that repo during verification with the `--repo` flag, or know to use the `--owner` flag.
 
-Generating the attestation using a reusable workflow that's owned by another user is not supported. The attestion will technically succeed but the workflow will fail when it cannot verify the attestation.
+Generating the attestation using a reusable workflow that's owned by another user is not supported. The attestion will technically succeed but the workflow will fail when it cannot verify that the attestation was created by the owner.
 
 ## License
 
