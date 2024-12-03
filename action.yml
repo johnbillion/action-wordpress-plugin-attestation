@@ -119,5 +119,5 @@ runs:
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ inputs.plugin }}.zip
+        path: ${{ inputs.plugin }}.zip
         if-no-files-found: error
