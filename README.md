@@ -2,10 +2,7 @@
 
 Do you use GitHub Actions to build and deploy your plugin to the WordPress.org Plugin Directory? Add this action to your deployment workflow to generate an attestation for the build provenance of the plugin ZIP file on WordPress.org.
 
-> [!WARNING]
-> This action is under development. Version 1.0 will be published when it's considered stable.
-
-This action works well with [the WordPress Plugin Deploy action by 10up](https://github.com/marketplace/actions/wordpress-plugin-deploy), but it will work with any workflow which generates a ZIP file of your plugin.
+This action integrates well with [the WordPress Plugin Deploy action by 10up](https://github.com/marketplace/actions/wordpress-plugin-deploy), but it will work with any workflow which can generate a ZIP file of your plugin.
 
 ## What is this and why should I use it?
 
@@ -113,9 +110,39 @@ gh attestation verify query-monitor.3.16.4.zip --repo johnbillion/query-monitor
 
 ## How can I test this action without doing a release?
 
-Add the steps to a `workflow_dispatch` workflow that checks out a tag, zips it up, and then runs it. You can use the 10up WordPress.org Plugin Deploy action with the `dry-run` input parameter to get the ZIP file path.
+Create a `workflow_dispatch` workflow that calls the `johnbillion/action-wordpress-plugin-attestation` action with the zip file of your plugin. You can then run this workflow against a branch or tag of your choice. Optionally use the `dry-run` parameter to perform all the verification steps without publishing the attestation.
 
-Optionally use the `dry-run` input parameter for this action to perform all the steps without actually creating and publishing the attestation.
+<details>
+  <summary>Example workflow:</summary>
+
+  ```yaml
+  name: Test attestation
+
+  on:
+    workflow_dispatch:
+
+  jobs:
+    deploy:
+      name: Test attestation
+      runs-on: ubuntu-latest
+      permissions:
+        attestations: write
+        contents: read
+        id-token: write
+      steps:
+        - name: Build the plugin zip file without deploying to WordPress.org
+          uses: 10up/action-wordpress-plugin-deploy@v2
+          id: deploy
+          with:
+            generate-zip: true
+            dry-run: true
+        - name: Attest build provenance
+          uses: johnbillion/action-wordpress-plugin-attestation@v0.5.0
+          with:
+            zip-path: ${{ steps.deploy.outputs.zip-path }}
+            dry-run: true # Remove this to publish the attestation
+  ```
+</details>
 
 ## How do I re-run attestation if the action times out before I confirm the release on WordPress.org?
 
@@ -129,7 +156,7 @@ You can also view all attestations from the Actions -> Attestations screen in yo
 
 ## Can I call this action within a reusable workflow?
 
-Yes, but be aware that when a consumer verifies an attestation they need to use the name of the repo containing the workflow file that performed the attestation. If the reusable workflow is in the same repo as your plugin then there's no problem, but if your reusable workflow lives in a different repo then they'll need to use the name of that repo.
+Yes, but be aware that when a consumer uses `gh attestation verify` or any other tool to verify an attestation _they need to use the name of the repo that contains the workflow file that performed the attestation_. If the reusable workflow is in the same repo as your plugin then there's no problem, but if your reusable workflow lives in a different repo then they'll need to know and use the name of that repo during verification.
 
 ## TODO
 
