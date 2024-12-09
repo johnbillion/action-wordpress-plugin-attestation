@@ -168,7 +168,7 @@ See above.
 
 To the best of my understanding, build provenance attestation on GitHub [adheres to SLSA v1.0 Build Level 2](https://slsa.dev/spec/v1.0/levels).
 
-Adhering to Build Level 3 requires that you perform the attestation in isolation from the build. [One way to do this is to use a reusable workflow to perform the attestation](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-and-reusable-workflows-to-achieve-slsa-v1-build-level-3).
+Adhering to Build Level 3 requires that you [perform the attestation in isolation from the build](https://slsa.dev/spec/v1.0/requirements#isolated). One way to do this is to [use a reusable workflow to perform the attestation](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-and-reusable-workflows-to-achieve-slsa-v1-build-level-3), but there are additional considerations such as not using caching during the build and deployment process.
 
 ## Where can I see the attestations for my plugin?
 
