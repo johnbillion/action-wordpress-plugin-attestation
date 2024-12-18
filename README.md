@@ -185,7 +185,7 @@ Yes, but be aware that when a consumer uses `gh attestation verify` or any other
 
 If the reusable workflow is in the same repo as your plugin or is owned by the same owner then there's no problem, but if your reusable workflow lives in a different repo then the consumer will need to either know and use the name of that repo during verification with the `--repo` flag, or know to use the `--owner` flag.
 
-Generating the attestation using a reusable workflow that's owned by another user is not supported. The attestation will technically succeed but the workflow will fail when it cannot verify that the attestation was created by the owner.
+Generating the attestation using a reusable workflow that's owned by another user is not supported.
 
 ## License
 
