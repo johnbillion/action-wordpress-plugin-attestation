@@ -102,6 +102,10 @@ Yes, this action specifically supports [plugin release confirmation](https://dev
 
 Set the `timeout-minutes` directive to a little higher than the `timeout` input of the action, which is 60 minutes by default. This allows some leeway for generating the attestation if you confirm your release right before the timeout is reached. 70 is a reasonable value.
 
+## Does this work for hosts other than WordPress.org?
+
+Yes, this action supports hosts other than WordPress.org in case you want to generate an attestation for a ZIP file that you deploy elsewhere.
+
 ## How do I verify a plugin that publishes attestations?
 
 You need to know either the name of the repo that the plugin was built from, for example `johnbillion/query-monitor`, or the name of the owner, for example `johnbillion`.
