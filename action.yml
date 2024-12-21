@@ -87,31 +87,39 @@ runs:
     # Now compare the contents of the generated ZIP and the plugin directory ZIP to ensure they match.
     # Only then can we attest the plugin directory ZIP.
     - name: Unzip the ZIP from the plugin directory
+      env:
+        PLUGIN: ${{ inputs.plugin }}
       run: | #shell
-        unzip -q -d zip-org "${{ inputs.plugin }}.zip"
+        unzip -q -d zip-deployed "${PLUGIN}.zip"
       shell: bash
 
-    - name: Unzip the generated zip
+    - name: Unzip the generated ZIP
+      env:
+        ZIP_PATH: ${{ inputs.zip-path }}
       run: | #shell
-        unzip -q -d zip-generated "${{ inputs.zip-path }}"
+        unzip -q -d zip-generated "${ZIP_PATH}"
       shell: bash
 
-    - name: Ensure the directories are identical
+    - name: Ensure the contents are identical
       run: | #shell
-        diff -r zip-generated zip-org
+        diff -r zip-generated zip-deployed
       shell: bash
 
-    - name: Generate attestation for the plugin
+    - name: Generate attestation for the ZIP
       if: ${{ inputs.dry-run == 'false' }}
       uses: actions/attest-build-provenance@v1
+      env:
+        PLUGIN: ${{ inputs.plugin }}
+        VERSION: ${{ inputs.version }}
       with:
-        subject-path: "${{ github.workspace }}/${{ inputs.plugin }}.zip"
-        subject-name: "wordpress.org-${{ inputs.plugin }}-${{ inputs.version }}"
+        subject-path: "${{ github.workspace }}/${{ env.PLUGIN }}.zip"
+        subject-name: "${{ env.PLUGIN_HOST }}-${{ env.PLUGIN }}-${{ env.VERSION }}"
 
-    - name: Check the attestation
+    - name: Verify the attestation
       if: ${{ inputs.dry-run == 'false' }}
-      run: | #shell
-        gh attestation verify "${{ inputs.plugin }}.zip" --owner "${{ github.repository_owner }}"
-      shell: bash
       env:
         GH_TOKEN: ${{ github.token }}
+        PLUGIN: ${{ inputs.plugin }}
+      run: | #shell
+        gh attestation verify "${PLUGIN}.zip" --owner "${GITHUB_REPOSITORY_OWNER}"
+      shell: bash
