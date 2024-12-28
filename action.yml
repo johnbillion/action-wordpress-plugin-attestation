@@ -39,11 +39,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Debug
-      run: | #shell
-        echo '${{ toJSON(inputs) }}'
-      shell: bash
-
     # This fetches the zipped plugin from the plugin directory. The ZIP might not exist yet if the plugin uses release confirmation
     # and the release hasn't been confirmed. This will retry until the ZIP is available or the timeout is reached.
     - name: Fetch ZIP from the plugin directory
