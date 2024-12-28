@@ -102,7 +102,7 @@ runs:
 
     - name: Generate attestation for the ZIP
       if: ${{ inputs.dry-run == 'false' }}
-      uses: actions/attest-build-provenance@v1
+      uses: actions/attest-build-provenance@v2
       env:
         PLUGIN: ${{ inputs.plugin }}
         VERSION: ${{ inputs.version }}
