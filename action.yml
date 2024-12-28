@@ -62,9 +62,9 @@ runs:
 
         while [ $elapsed -lt $max_retries ]; do
           # Perform a HEAD request to check if the ZIP is available
-          status_code=$(curl -s -o /dev/null -w "%{http_code}" -I "$zipurl")
+          status_code=$(curl --silent --output /dev/null --write-out "%{http_code}" --head "$zipurl")
           if [ "$status_code" -eq 200 ]; then
-            curl -s -o "${PLUGIN}.zip" "$zipurl"
+            curl --silent --output "${PLUGIN}.zip" "$zipurl"
             break
           else
             echo "Plugin ZIP not available yet (HTTP status $status_code), retrying in $sleep seconds..."
@@ -97,7 +97,7 @@ runs:
 
     - name: Ensure the contents are identical
       run: | #shell
-        diff -r zip-generated zip-deployed
+        diff --recursive zip-generated zip-deployed
       shell: bash
 
     - name: Generate attestation for the ZIP
