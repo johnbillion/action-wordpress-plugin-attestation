@@ -2,7 +2,7 @@
 
 Do you use GitHub Actions to deploy your plugin to the WordPress.org plugin directory? Add this action to your deployment workflow to generate a [build provenance attestation](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-to-establish-provenance-for-builds) of the plugin ZIP file on WordPress.org.
 
-This action integrates well with [the WordPress.org Plugin Deploy action](https://github.com/marketplace/actions/wordpress-plugin-deploy), but it will work with any workflow which deploys your plugin.
+This action integrates well with [the WordPress Plugin Deploy action](https://github.com/marketplace/actions/wordpress-plugin-deploy), but it can work with any workflow which deploys your plugin.
 
 ## What is this and why should I use it?
 
@@ -13,7 +13,7 @@ This action integrates well with [the WordPress.org Plugin Deploy action](https:
 
 This action generates an artifact attestation for the ZIP file that is served by the plugin directory for each release of your plugin. This can subsequently be used by consumers to verify that a given version of your plugin actually originated from your user account on GitHub.
 
-There is not much tooling for the verification aspect at the moment — other than the `gh attestation verify` command — but this ultimately facilitates verifying that a plugin release came from its trusted author rather than an unwanted entity, for example somebody who stole your wordpress.org svn password, hacked into wordpress.org, or performed a hostile plugin takeover.
+There is not much tooling for the verification aspect at the moment — other than the `gh attestation verify` command — but this ultimately facilitates verifying that a plugin release came from its trusted author rather than an unwanted entity, for example somebody who stole your SVN password, hacked into WordPress.org, or performed a hostile plugin takeover.
 
 ## Usage
 
@@ -107,9 +107,8 @@ Yes, this action supports plugins that have a build step because it is only conc
 
 Yes, this action specifically supports [plugin release confirmation](https://developer.wordpress.org/plugins/wordpress-org/release-confirmation-emails/). It will periodically attempt to fetch the plugin ZIP from the plugin directory for up to 60 minutes, which allows you plenty of time to confirm the release.
 
-## Tip
-
-Set the `timeout-minutes` directive to a little higher than the `timeout` input of the action, which is 60 minutes by default. This allows some leeway for generating the attestation if you confirm your release right before the timeout is reached. 70 is a reasonable value.
+> [!TIP]
+> Set the `timeout-minutes` directive to a little higher than the `timeout` input of the action, which is 60 minutes by default. This allows some leeway for generating the attestation if you confirm your release right before the timeout is reached. 70 is a reasonable value.
 
 ## Does this work for hosts other than WordPress.org?
 
