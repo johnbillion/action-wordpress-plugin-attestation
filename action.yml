@@ -35,6 +35,19 @@ inputs:
     required: false
     type: boolean
     default: false
+outputs:
+  bundle-path:
+    description: Absolute path to the file containing the generated attestation.
+    value: ${{ steps.generate-attestation.outputs.bundle-path }}
+  attestation-id:
+    description: GitHub ID for the attestation.
+    value: ${{ steps.generate-attestation.outputs.attestation-id }}
+  attestation-url:
+    description: URL for the attestation summary.
+    value: ${{ steps.generate-attestation.outputs.attestation-url }}
+  zip-url:
+    description: URL where the plugin ZIP file is hosted.
+    value: ${{ steps.fetch-zip.outputs.zip-url }}
 
 runs:
   using: composite
@@ -42,6 +55,7 @@ runs:
     # This fetches the zipped plugin from the plugin directory. The ZIP might not exist yet if the plugin uses release confirmation
     # and the release hasn't been confirmed. This will retry until the ZIP is available or the timeout is reached.
     - name: Fetch ZIP from the plugin directory
+      id: fetch-zip
       env:
         PLUGIN: ${{ inputs.plugin }}
         VERSION: ${{ inputs.version }}
@@ -53,6 +67,7 @@ runs:
         zipurl=${zipurl//%version%/$VERSION}
 
         echo PLUGIN_HOST="$(echo "$zipurl" | awk -F/ '{print $3}')" >> "$GITHUB_ENV"
+        echo zip-url="$zipurl" >> "$GITHUB_OUTPUT"
 
         echo "Fetching plugin ZIP from $zipurl ..."
         elapsed=0
@@ -102,6 +117,7 @@ runs:
 
     - name: Generate attestation for the ZIP
       if: ${{ inputs.dry-run == 'false' }}
+      id: generate-attestation
       uses: actions/attest-build-provenance@v2
       env:
         PLUGIN: ${{ inputs.plugin }}

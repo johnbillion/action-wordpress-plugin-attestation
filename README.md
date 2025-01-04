@@ -95,6 +95,15 @@ Here is the full list of required and optional inputs:
     zip-url: 'https://example.com/%plugin%-%version%.zip'
 ```
 
+## Outputs
+
+| Name              | Description                                                    | Example                                                |
+| ----------------- | -------------------------------------------------------------- | ------------------------------------------------------ |
+| `attestation-id`  | GitHub ID for the attestation                                  | `123456`                                               |
+| `attestation-url` | URL for the attestation summary                                | `https://github.com/foo/bar/attestations/123456`       |
+| `bundle-path`     | Absolute path to the file containing the generated attestation | `/tmp/attestation.json`                                |
+| `zip-url`         | URL where the plugin ZIP file is hosted                        | `https://downloads.wordpress.org/plugin/foo.1.2.3.zip` |
+
 ## Can't I just use `actions/attest-build-provenance`?
 
 This action is a wrapper for the `actions/attest-build-provenance` action provided by GitHub. It specifically handles generating an attestation for the ZIP file of your plugin once it's been deployed to the plugin directory. This facilitates consumers being able to verify the provenance of the ZIP file that they download from WordPress.org, not just for an artifact on GitHub.
