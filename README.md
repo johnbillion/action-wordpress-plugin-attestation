@@ -132,22 +132,39 @@ If you deploy your plugin to multiple locations, call this action once for each.
 
 ## How do I verify a plugin that publishes attestations?
 
-You need to know either the name of the repo that the plugin was built from, for example `johnbillion/query-monitor`, or the name of the owner, for example `johnbillion`.
+At a minimum you need to know the name of the owner of the repo that the plugin was built from, for example `johnbillion`.
 
-Then you can fetch the plugin ZIP at a specific version and verify its provenance using `gh`:
+Then you can fetch the plugin ZIP file at a specific version and verify its provenance using the `gh` command:
 
-### Verify provenance with the owner name
+### Verify provenance using the owner name
+
+The `--owner` option works regardless of whether or not the plugin uses a reusable workflow for its deployment:
 
 ```sh
 wget https://downloads.wordpress.org/plugin/query-monitor.3.16.4.zip
-gh attestation verify query-monitor.3.16.4.zip --owner johnbillion
+gh attestation verify query-monitor.3.16.4.zip \
+  --owner johnbillion
 ```
 
-### Verify provenance with the repo name
+### Verify provenance using the repo name
+
+The `--repo` option only works only if the plugin is not using a reusable workflow for its deployment:
 
 ```sh
 wget https://downloads.wordpress.org/plugin/query-monitor.3.16.4.zip
-gh attestation verify query-monitor.3.16.4.zip --repo johnbillion/query-monitor
+gh attestation verify query-monitor.3.16.4.zip \
+  --repo johnbillion/query-monitor
+```
+
+### Verify provenance using the repo name and signer repo name
+
+The combined `--repo` and `--signer-repo` options work if the plugin uses a reusable workflow for its deployment:
+
+```sh
+wget https://downloads.wordpress.org/plugin/query-monitor.3.16.4.zip
+gh attestation verify query-monitor.3.16.4.zip \
+  --repo johnbillion/query-monitor \
+  --signer-repo johnbillion/plugin-infrastructure
 ```
 
 ## How can I test this action without doing a release?
@@ -194,9 +211,9 @@ See above.
 
 ## What SLSA level does this facilitate?
 
-To the best of my understanding, build provenance attestation on GitHub [adheres to SLSA v1.0 Build Level 2](https://slsa.dev/spec/v1.0/levels).
+To the best of my understanding, build provenance attestation on GitHub [facilitates adhering to SLSA v1.0 Build Level 2](https://slsa.dev/spec/v1.0/levels).
 
-Adhering to Build Level 3 requires that you [perform the attestation in isolation from the build](https://slsa.dev/spec/v1.0/requirements#isolated). One way to do this is to [use a reusable workflow to perform the attestation](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-and-reusable-workflows-to-achieve-slsa-v1-build-level-3), but there are additional considerations such as not using caching during the build and deployment process.
+Adhering to SLSA v1.0 Build Level 3 requires that [the build runs in an isolated environment](https://slsa.dev/spec/v1.0/requirements#isolated). One way to do this is to [use a reusable workflow to perform the build, deployment, and attestation generation](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-and-reusable-workflows-to-achieve-slsa-v1-build-level-3), but there are additional considerations such as not using caching during the build and deployment process.
 
 ## Where can I see the attestations for my plugin?
 
@@ -206,14 +223,7 @@ You can also view all attestations from the Actions -> Attestations screen in yo
 
 ## Can I call this action within a reusable workflow?
 
-Yes, but be aware that when a consumer uses `gh attestation verify` or any other tool to verify an attestation they need to either:
-
-* Use the name of the repo that contains the workflow file that performed the attestation (via the `--repo` flag)
-* Or, use the name of the owner of the workflow file that performed the attestation (via the `--owner` flag)
-
-If the reusable workflow is in the same repo as your plugin or is owned by the same owner then there's no problem, but if your reusable workflow lives in a different repo then the consumer will need to either know and use the name of that repo during verification with the `--repo` flag, or know to use the `--owner` flag.
-
-Generating an attestation using a reusable workflow that's owned by another user is not supported.
+Yes, but be aware that when a consumer uses `gh attestation verify` to verify an attestation they need to be aware of which option(s) they need to provide to the command depending on whether a reusable workflow was used to deploy the plugin. See the [How do I verify a plugin that publishes attestations?](#how-do-i-verify-a-plugin-that-publishes-attestations) section above for all the details.
 
 ## Sponsors
 

@@ -95,7 +95,7 @@ runs:
       shell: bash
 
     # Now compare the contents of the generated ZIP and the plugin directory ZIP to ensure they match.
-    # Only then can we attest the plugin directory ZIP.
+    # Only then should an attestation for the plugin directory ZIP be generated.
     - name: Unzip the ZIP from the plugin directory
       env:
         PLUGIN: ${{ inputs.plugin }}
