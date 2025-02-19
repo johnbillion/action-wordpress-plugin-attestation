@@ -71,7 +71,7 @@ runs:
 
         echo "Fetching plugin ZIP from $zipurl ..."
         elapsed=0
-        sleep=20
+        sleep=10
         per_minute=$((60 / $sleep))
         max_retries=$(( ${TIMEOUT} * $per_minute ))
 
