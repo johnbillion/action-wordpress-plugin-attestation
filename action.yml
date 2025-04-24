@@ -73,7 +73,7 @@ runs:
         elapsed=0
         sleep=10
         per_minute=$((60 / $sleep))
-        max_retries=$(( ${TIMEOUT} * $per_minute ))
+        max_retries=$(( ${TIMEOUT} * $per_minute - 1 ))
 
         while [ $elapsed -lt $max_retries ]; do
           # Perform a HEAD request to check if the zip is available

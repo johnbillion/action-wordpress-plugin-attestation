@@ -46,7 +46,7 @@ jobs:
       attestations: write
       contents: read
       id-token: write
-    timeout-minutes: 70
+    timeout-minutes: 60
     steps:
       - name: Deploy to the plugin directory
         uses: 10up/action-wordpress-plugin-deploy@v2
@@ -116,8 +116,6 @@ Yes, this action supports plugins that have a build step because it is only conc
 
 Yes, this action specifically supports [plugin release confirmation](https://developer.wordpress.org/plugins/wordpress-org/release-confirmation-emails/). It will periodically attempt to fetch the plugin zip from the plugin directory for up to 60 minutes, which allows you plenty of time to confirm the release.
 
-> [!TIP]
-> Set the `timeout-minutes` directive to a little higher than the `timeout` input of the action, which is 60 minutes by default. This allows some leeway for generating the attestation if you confirm your release right before the timeout is reached. 70 is a reasonable value.
 ## Does this work for hosts other than wordpress.org?
 
 Yes, this action supports hosts other than wordpress.org in case you want to generate an attestation for a zip file that you deploy elsewhere. The `zip-url` input can be used to specify a custom zip URL to fetch and attest. These dynamic value placeholders can be used within the URL:
