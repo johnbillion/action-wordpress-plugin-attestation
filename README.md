@@ -1,6 +1,6 @@
 # WordPress Plugin Attestation
 
-Do you use GitHub Actions to deploy your plugin to the wordpress.org plugin directory? Add this action to your deployment workflow to generate a [build provenance attestation](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-to-establish-provenance-for-builds) of the plugin zip file on wordpress.org.
+Do you use GitHub Actions to deploy your plugin to the wordpress.org plugin directory? Add this action to your deployment workflow to generate a [build provenance attestation](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-to-establish-provenance-for-builds) of the plugin zip file on wordpress.org and therefore harden the supply chain security of your plugin.
 
 This action integrates well with [the WordPress Plugin Deploy action](https://github.com/marketplace/actions/wordpress-plugin-deploy), but it can work with any workflow which deploys your plugin.
 
@@ -114,7 +114,7 @@ Yes, this action supports plugins that have a build step because it is only conc
 
 ## Does this work if release confirmation is enabled?
 
-Yes, this action specifically supports [plugin release confirmation](https://developer.wordpress.org/plugins/wordpress-org/release-confirmation-emails/). It will periodically attempt to fetch the plugin zip from the plugin directory for up to 60 minutes, which allows you plenty of time to confirm the release.
+Yes, this action specifically supports [plugin release confirmation on wordpress.org](https://developer.wordpress.org/plugins/wordpress-org/release-confirmation-emails/). It will periodically attempt to fetch the plugin zip from the plugin directory for up to 60 minutes, which allows you plenty of time to confirm the release.
 
 ## Does this work for hosts other than wordpress.org?
 
@@ -135,7 +135,7 @@ Then you can fetch the plugin zip file at a specific version and verify its prov
 
 ### Verify provenance using the owner name
 
-The `--owner` option works regardless of whether or not the plugin uses a reusable workflow for its deployment:
+The `--owner` option is the most straight forward and works regardless of whether or not the plugin uses a reusable workflow for its deployment:
 
 ```sh
 wget https://downloads.wordpress.org/plugin/query-monitor.3.16.4.zip
@@ -145,7 +145,7 @@ gh attestation verify query-monitor.3.16.4.zip \
 
 ### Verify provenance using the repo name
 
-The `--repo` option only works only if the plugin is not using a reusable workflow for its deployment:
+The `--repo` option works only if the plugin is not using a separate reusable workflow for its deployment:
 
 ```sh
 wget https://downloads.wordpress.org/plugin/query-monitor.3.16.4.zip
@@ -155,7 +155,7 @@ gh attestation verify query-monitor.3.16.4.zip \
 
 ### Verify provenance using the repo name and signer repo name
 
-The combined `--repo` and `--signer-repo` options work if the plugin uses a reusable workflow for its deployment:
+The combined `--repo` and `--signer-repo` options work if the plugin uses a separate reusable workflow for its deployment:
 
 ```sh
 wget https://downloads.wordpress.org/plugin/query-monitor.3.16.4.zip
@@ -206,6 +206,14 @@ Optionally use the `dry-run` parameter to perform all the verification steps wit
 
 See above.
 
+## What happens if a change is pushed directly to the wordpress.org plugin SVN repo?
+
+This will cause verification of that version of the plugin to fail, which is correct and intended behaviour because the change was not made via your build and deployment workflow. Congratulations, you've made it more difficult for a supply chain attack to affect your plugin!
+
+## How can I continually monitor the verification of my plugin on wordpress.org?
+
+One way to do this is with a scheduled script or workflow that [downloads your plugin and verifies its provenance](https://github.com/johnbillion/plugin-infrastructure/blob/74e5dfee3fe964300ae67309adbeff3e2d8f2a93/.github/workflows/reusable-verify-distribution.yml#L24-L37). Whether this is sufficient for your threat model is for you to determine.
+
 ## What SLSA level does this facilitate?
 
 To the best of my understanding, build provenance attestation on GitHub [facilitates adhering to SLSA v1.0 Build Level 2](https://slsa.dev/spec/v1.0/levels).
@@ -217,6 +225,10 @@ Adhering to SLSA v1.0 Build Level 3 requires that [the build runs in an isolated
 The action will output a link to the attestation.
 
 You can also view all attestations from the Actions -> Attestations screen in your repo.
+
+## Can I re-run this action?
+
+If a deployment fails and you need to re-run part or all of it, it's safe to re-run this action. An attestation will be created each time it's called, but that's not a problem because multiple attestations for the same artifact are harmless. Unwanted attestations can be deleted from the Actions -> Attestations screen in your repo.
 
 ## Can I call this action within a reusable workflow?
 
