@@ -48,6 +48,9 @@ outputs:
   zip-url:
     description: URL where the plugin zip file is hosted.
     value: ${{ steps.fetch-zip.outputs.zip-url }}
+  zip-sha-256:
+    description: SHA-256 hash of the downloaded plugin zip file.
+    value: ${{ steps.fetch-zip.outputs.zip-sha-256 }}
 
 runs:
   using: composite
@@ -80,6 +83,9 @@ runs:
           status_code=$(curl --silent --output /dev/null --write-out "%{http_code}" --head "$zipurl")
           if [ "$status_code" -eq 200 ]; then
             curl --silent --output "${PLUGIN}.zip" "$zipurl"
+            # Calculate SHA-256 hash of the downloaded zip
+            sha256=$(sha256sum "${PLUGIN}.zip" | cut -d' ' -f1)
+            echo "zip-sha-256=$sha256" >> "$GITHUB_OUTPUT"
             break
           else
             echo "Plugin zip not available yet (HTTP status $status_code), retrying in $sleep seconds..."

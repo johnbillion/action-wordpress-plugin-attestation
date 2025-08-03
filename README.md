@@ -103,6 +103,7 @@ Here is the full list of required and optional inputs:
 | `attestation-url` | URL for the attestation summary                                | `https://github.com/foo/bar/attestations/123456`       |
 | `bundle-path`     | Absolute path to the file containing the generated attestation | `/tmp/attestation.json`                                |
 | `zip-url`         | URL where the plugin zip file is hosted                        | `https://downloads.wordpress.org/plugin/foo.1.2.3.zip` |
+| `zip-sha-256`     | SHA-256 hash of the downloaded plugin zip file                 | `a1b2c3d4e5f6...`                                      |
 
 ## Can't I just use `actions/attest-build-provenance`?
 
