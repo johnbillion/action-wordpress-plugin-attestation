@@ -82,6 +82,8 @@ runs:
           # Perform a HEAD request to check if the zip is available
           status_code=$(curl --silent --output /dev/null --write-out "%{http_code}" --head "$zipurl")
           if [ "$status_code" -eq 200 ]; then
+            # One more sleep before downloading to ensure the file is fully available
+            sleep $sleep
             curl --silent --output "${PLUGIN}.zip" "$zipurl"
             # Calculate SHA-256 hash of the downloaded zip
             sha256=$(sha256sum "${PLUGIN}.zip" | cut -d' ' -f1)
