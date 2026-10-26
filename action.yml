@@ -73,33 +73,38 @@ runs:
         echo zip-url="$zipurl" >> "$GITHUB_OUTPUT"
 
         echo "Fetching plugin zip from $zipurl ..."
-        elapsed=0
+        attempts=0
         sleep=10
         per_minute=$((60 / $sleep))
-        max_retries=$(( ${TIMEOUT} * $per_minute - 1 ))
+        max_attempts=$(( ${TIMEOUT} * $per_minute ))
 
-        while [ $elapsed -lt $max_retries ]; do
-          # Perform a HEAD request to check if the zip is available
-          status_code=$(curl --silent --output /dev/null --write-out "%{http_code}" --head "$zipurl")
-          if [ "$status_code" -eq 200 ]; then
-            # One more sleep before downloading to ensure the file is fully available
-            sleep $sleep
-            curl --silent --output "${PLUGIN}.zip" "$zipurl"
-            # Calculate SHA-256 hash of the downloaded zip
-            sha256=$(sha256sum "${PLUGIN}.zip" | cut -d' ' -f1)
-            echo "zip-sha-256=$sha256" >> "$GITHUB_OUTPUT"
+        # The zip can return a 200 before every server behind the download host can serve it, so a download only
+        # counts once it's a valid zip.
+        while true; do
+          attempts=$((attempts + 1))
+          status_code=$(curl --silent --location --output "${PLUGIN}.zip" --write-out "%{http_code}" "$zipurl" || true)
+
+          if [ "$status_code" = "200" ] && unzip -tq "${PLUGIN}.zip" > /dev/null 2>&1; then
             break
-          else
-            echo "Plugin zip not available yet (HTTP status $status_code), retrying in $sleep seconds..."
-            sleep $sleep
-            elapsed=$((elapsed + 1))
           fi
+
+          if [ "$status_code" = "200" ]; then
+            echo "Downloaded file is not a valid zip ($(wc -c < "${PLUGIN}.zip") bytes)."
+          else
+            echo "Plugin zip not available yet (HTTP status $status_code)."
+          fi
+
+          if [ $attempts -ge $max_attempts ]; then
+            echo "Error: ${TIMEOUT} minute timeout reached. Plugin zip not available."
+            exit 1
+          fi
+
+          echo "Retrying in $sleep seconds..."
+          sleep $sleep
         done
 
-        if [ $elapsed -ge $max_retries ]; then
-          echo "Error: ${TIMEOUT} minute timeout reached. Plugin zip not available."
-          exit 1
-        fi
+        sha256=$(sha256sum "${PLUGIN}.zip" | cut -d' ' -f1)
+        echo "zip-sha-256=$sha256" >> "$GITHUB_OUTPUT"
       shell: bash
 
     # Now compare the contents of the generated zip and the plugin directory zip to ensure they match.
@@ -122,6 +127,14 @@ runs:
       run: | #shell
         diff --recursive zip-generated zip-deployed
       shell: bash
+
+    - name: Upload the zip from the plugin directory for debugging
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: ${{ inputs.plugin }}-${{ inputs.version }}-plugin-directory-zip
+        path: ${{ github.workspace }}/${{ inputs.plugin }}.zip
+        if-no-files-found: ignore
 
     - name: Generate attestation for the zip
       if: ${{ inputs.dry-run == 'false' }}
